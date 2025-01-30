@@ -8,10 +8,6 @@ def read_root():
 
 @app.get("/items")
 def get_items():
-    return {"items": ["item1", "item2", "item3"]}
-
-@app.get("/items")
-def get_items():
     return {
         "items": [
             {"id": 1, "name": "item1", "description": "A fancy item", "price": 10.99},
