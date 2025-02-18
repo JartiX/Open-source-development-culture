@@ -3,7 +3,7 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from fastapi import FastAPI
-from app.routes import users
+from app.routes import users, files
 from app.database import Base, engine
 import uvicorn
 
