@@ -1,10 +1,11 @@
-import uvicorn
-from app.database import Base, engine
-from app.routes import users
-from fastapi import FastAPI
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from fastapi import FastAPI
+from app.routes import users
+from app.database import Base, engine
+import uvicorn
 
 
 Base.metadata.create_all(bind=engine)
