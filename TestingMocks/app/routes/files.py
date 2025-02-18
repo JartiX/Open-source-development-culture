@@ -2,7 +2,7 @@ from fastapi import APIRouter, UploadFile, File, Depends
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.models import CSVData
-
+from app.parse_csv import parse_csv
 
 router = APIRouter()
 
@@ -22,3 +22,8 @@ async def upload_file(user_id: int, file: UploadFile = File(...), db: Session = 
     db.add(db_entry)
     db.commit()
     return {"message": "File uploaded successfully"}
+
+
+@router.get("/json/{string}")
+def get_json(string: str):
+    return parse_csv(string)
