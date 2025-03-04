@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 open-source-development documentation
-=====================================
+============================================
 
 Add your content using ``reStructuredText`` syntax. See the
 `reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
@@ -13,19 +13,21 @@ documentation for details.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents: 
+
+api
 
 Readme File
-===========
+=============================================
 
 .. include:: ../../README.rst
 
 Alice_and_Fedor Project
-===========
+=============================================
 
 .. include:: ../../Alice_and_Fedor/item_keeper/README.rst
 
 TestingMocks Project
-===========
+=============================================
 
 .. include:: ../../TestingMocks/readme.rst

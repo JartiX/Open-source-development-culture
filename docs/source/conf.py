@@ -25,3 +25,12 @@ exclude_patterns = []
 
 html_theme = 'alabaster'
 html_static_path = ['_static']
+
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath('../../TestingMocks/app/routes/'))
+sys.path.insert(0, os.path.abspath('../../TestingMocks/app/'))
+sys.path.insert(0, os.path.abspath('../../Alice_and_Fedor/item_keeper/'))
+
+extensions = ['sphinx.ext.autodoc']
