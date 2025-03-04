@@ -4,3 +4,6 @@ python-multipart
 uvicorn
 fastapi
 SQLAlchemy
+httpx
+requests_mock
+requests
