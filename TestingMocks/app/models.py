@@ -13,6 +13,7 @@ class User(Base):
         password (str): Hashed password for authentication purposes.
     """
     __tablename__ = "users"
+    __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
@@ -30,6 +31,7 @@ class CSVData(Base):
         user (User): Relationship linking each CSV entry to its associated user.
     """
     __tablename__ = "csv_data"
+    __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
