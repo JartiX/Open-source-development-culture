@@ -63,12 +63,140 @@
 </section>
 <section id="testingmocks-project">
 <h2>TestingMocks Project<a class="headerlink" href="#testingmocks-project" title="Permalink to this heading">¶</a></h2>
-<section id="testingmocks">
-<h3>TestingMocks<a class="headerlink" href="#testingmocks" title="Permalink to this heading">¶</a></h3>
-<p>Часто бывает что для проверки функциональности не достаточно просто протестировать отдельные функции библиотеки. Хотя это обязательная часть, но не всегда достаточная. Например если мы разрабатываем библиотеку и REST-API приложение, которое использует библиотеку и предоставляет пользователю результаты обработки его данные. Тестирование библиотеки хорошо реализуется с помощью таких инструментов как pytest и unittest. Но даже при идеально работающей библиотеке, мы можем получить дополнительные ошибки в самом приложении и нужно протестировать не только функциональность самой библиотеки, но и код, который обеспечивает передачу данных от пользователя в библиотеку.</p>
-<p>Тестирование должно оставаться как можно ближе к реальному использованию - для тестирования библиотеки, мы вызываем функции из этой библиотеки. Соответственно, чтобы протестировать сервер, нужно сделать запросы к этому серверу, примерно так же как это делает пользователь.</p>
 </section>
 </section>
+<section id="testingmocks-csv-api-testing-project">
+<h1>TestingMocks - CSV API Testing Project<a class="headerlink" href="#testingmocks-csv-api-testing-project" title="Permalink to this heading">¶</a></h1>
+<p>TestingMocks is a project that demonstrates how to implement and test a FastAPI-based API for CSV file processing. It consists of:</p>
+<ol class="arabic simple">
+<li><p><strong>Server Application</strong>: A FastAPI application that provides endpoints for user registration, CSV file uploads, and data retrieval</p></li>
+<li><p><strong>Client CLI</strong>: A command-line interface for interacting with the API</p></li>
+<li><p><strong>Test Suite</strong>: Comprehensive tests for both the server and client components</p></li>
+</ol>
+<p>The project illustrates how to test different components of a web application independently while ensuring that all parts work correctly together.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>TestingMocks/
+├── app/                        # Server-side code
+│   ├── database.py             # Database configuration
+│   ├── main.py                 # FastAPI application entry point
+│   ├── models.py               # SQLAlchemy ORM models
+│   ├── parse_csv.py            # CSV parsing utility
+│   ├── schemas.py              # Pydantic models
+│   └── routes/                 # API endpoints
+│       ├── files.py            # File upload endpoints
+│       └── users.py            # User management endpoints
+├── cli/                        # Client-side code
+│   └── client.py               # Command-line client
+├── tests/                      # Automated tests
+│   ├── test_client.py          # Client tests with mock HTTP responses
+│   └── test_server.py          # Server tests with FastAPI TestClient
+└── requirements.txt            # Project dependencies
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>User Management</strong>: Register users and retrieve user lists</p></li>
+<li><p><strong>File Processing</strong>: Upload and parse CSV files</p></li>
+<li><p><strong>Data Retrieval</strong>: Retrieve data associated with specific users</p></li>
+<li><p><strong>RESTful API</strong>: Well-structured API with proper error handling</p></li>
+<li><p><strong>CLI Client</strong>: User-friendly command-line interface</p></li>
+</ul>
+<ul class="simple">
+<li><p>Python 3.8+</p></li>
+<li><p>FastAPI</p></li>
+<li><p>SQLAlchemy</p></li>
+<li><p>Uvicorn</p></li>
+<li><p>Requests</p></li>
+<li><p>Pytest</p></li>
+</ul>
+<ol class="arabic">
+<li><p>Clone the repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/JartiX/Open-source-development-culture.git
+<span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;Open-source-development-culture/TestingMocks&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create a virtual environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+<span class="c1"># On Windows</span>
+venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
+<span class="c1"># On Unix or MacOS</span>
+<span class="nb">source</span><span class="w"> </span>venv/bin/activate
+</pre></div>
+</div>
+</li>
+<li><p>Install the dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Run the FastAPI server:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>app.main
+</pre></div>
+</div>
+<p>The server will be available at <code class="docutils literal notranslate"><span class="pre">http://localhost:8000</span></code></p>
+<p>Run the command-line client:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>cli.client
+</pre></div>
+</div>
+<p>The client provides a menu with options to:</p>
+<ol class="arabic simple">
+<li><p>Register a user</p></li>
+<li><p>Upload a CSV file</p></li>
+<li><p>Get a list of all users</p></li>
+<li><p>Get data for a specific user</p></li>
+<li><p>Exit</p></li>
+</ol>
+<p>Run all tests:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest
+</pre></div>
+</div>
+<p>Run specific test files:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test only the client</span>
+pytest<span class="w"> </span>tests/test_client.py
+
+<span class="c1"># Test only the server</span>
+pytest<span class="w"> </span>tests/test_server.py
+</pre></div>
+</div>
+<p>Run tests with verbose output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-v<span class="w"> </span>tests/
+</pre></div>
+</div>
+<p>This project demonstrates two different approaches to testing:</p>
+<ol class="arabic simple">
+<li><p><strong>Server Testing</strong>: Uses FastAPI’s <code class="docutils literal notranslate"><span class="pre">TestClient</span></code> to test API endpoints without starting a real HTTP server. The tests interact directly with the FastAPI application, making it easy to test routing, request handling, and database interactions.</p></li>
+<li><p><strong>Client Testing</strong>: Uses the <code class="docutils literal notranslate"><span class="pre">requests_mock</span></code> library to mock HTTP responses, allowing client code to be tested without a running server. This approach isolates the client code from the server and enables testing various scenarios, including error conditions.</p></li>
+</ol>
+<ul class="simple">
+<li><p><strong>Mocking HTTP requests</strong>: Using <code class="docutils literal notranslate"><span class="pre">requests_mock</span></code> to simulate server responses</p></li>
+<li><p><strong>Input/output capture</strong>: Mocking user input and capturing console output</p></li>
+<li><p><strong>Database testing</strong>: Working with a test database</p></li>
+<li><p><strong>API testing</strong>: Testing RESTful endpoints</p></li>
+<li><p><strong>Test isolation</strong>: Ensuring each test is independent</p></li>
+<li><p><strong>Error handling</strong>: Testing both success and failure scenarios</p></li>
+</ul>
+<ul class="simple">
+<li><p><strong>FastAPI Application</strong>: Provides the API endpoints and handles HTTP requests</p></li>
+<li><p><strong>SQLAlchemy ORM</strong>: Manages database interactions and object-relational mapping</p></li>
+<li><p><strong>Pydantic Models</strong>: Validate request and response data</p></li>
+<li><p><strong>CSV Parser</strong>: Processes and validates CSV files</p></li>
+</ul>
+<ul class="simple">
+<li><p><strong>Command-line Interface</strong>: Provides a user-friendly way to interact with the API</p></li>
+<li><p><strong>HTTP Client</strong>: Uses the <code class="docutils literal notranslate"><span class="pre">requests</span></code> library to communicate with the server</p></li>
+</ul>
+<ul class="simple">
+<li><p><strong>Server changes</strong>: When adding new endpoints or modifying existing ones, update both the server implementation and the corresponding tests</p></li>
+<li><p><strong>Client changes</strong>: When modifying the client, ensure that the tests are updated to reflect the changes</p></li>
+<li><p><strong>Database schema changes</strong>: Update both the models and the test fixtures</p></li>
+</ul>
+<p>This project serves as a practical demonstration of testing techniques. Here are some resources to learn more:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://fastapi.tiangolo.com/">FastAPI Documentation</a></p></li>
+<li><p><a class="reference external" href="https://docs.pytest.org/">Pytest Documentation</a></p></li>
+<li><p><a class="reference external" href="https://docs.sqlalchemy.org/">SQLAlchemy Documentation</a></p></li>
+<li><p><a class="reference external" href="https://requests-mock.readthedocs.io/">Requests Mock Documentation</a></p></li>
+</ul>
 </section>
 
 
