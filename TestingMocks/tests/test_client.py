@@ -1,124 +1,216 @@
-import requests
+import os
+import sys
+import unittest.mock as mock
+import io
 import requests_mock
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from cli.client import register, upload, get_users, get_user_data, BASE_URL
+
 
 def test_register():
     """
-    Tests the user registration endpoint.
-
-    This function mocks a POST request to `/users/register` and verifies
-    that the response contains the expected success message.
-
-    Test Steps:
-        1. Mock the API response to return a success message.
-        2. Send a POST request with test user credentials.
-        3. Assert that the response message matches the expected output.
-
-    Expected API Response:
-        {"message": "User registered successfully"}
+    Tests the user registration function from the client module.
+    
+    This test mocks user input and HTTP requests to verify that the register function
+    works correctly with the mocked API.
     """
     with requests_mock.Mocker() as m:
-        m.post("http://127.0.0.1:8000/users/register",
-               json={"message": "User registered successfully"})
+        m.post(f"{BASE_URL}/users/register", 
+               json={"message": "User registered successfully"},
+               status_code=200)
+        
+        with mock.patch('builtins.input', side_effect=["test_user", "test_password"]):
+            original_stdout = sys.stdout
+            sys.stdout = io.StringIO()
+            
+            register()
+            
+            output = sys.stdout.getvalue()
+            sys.stdout = original_stdout
+            
+            assert m.last_request.json() == {"username": "test_user", "password": "test_password"}
+            
+            assert "User registered successfully" in output
 
-        response = requests.post(
-            "http://127.0.0.1:8000/users/register", json={"username": "test", "password": "test"})
 
-        assert response.json()["message"] == "User registered successfully"
+def test_register_error():
+    """
+    Tests the register function with an error response from the API.
+    
+    This test verifies that the client properly handles and displays error messages
+    from the API when registration fails.
+    """
+    with requests_mock.Mocker() as m:
+        m.post(f"{BASE_URL}/users/register", 
+               json={"detail": "Username already exists"}, 
+               status_code=400)
+        
+        with mock.patch('builtins.input', side_effect=["existing_user", "password"]):
+            original_stdout = sys.stdout
+            sys.stdout = io.StringIO()
+            
+            register()
+            
+            output = sys.stdout.getvalue()
+            sys.stdout = original_stdout
+            
+            assert "Username already exists" in output
+
 
 def test_upload():
     """
-    Tests the file upload endpoint.
-
-    This function creates a temporary CSV file, mocks a POST request to `/files/upload`,
-    and verifies that the response confirms a successful upload.
-
-    Test Steps:
-        1. Mock the API response for a file upload.
-        2. Create a test CSV file with sample data.
-        3. Open the file and send a POST request to the `/files/upload` endpoint.
-        4. Assert that the response message matches the expected output.
-
-    Expected API Response:
-        {"message": "File uploaded successfully"}
+    Tests the file upload function from the client module.
+    
+    This test mocks user input, file operations, and HTTP requests to verify that
+    the upload function works correctly with the mocked API.
     """
     with requests_mock.Mocker() as m:
-        m.post("http://127.0.0.1:8000/files/upload",
-               json={"message": "File uploaded successfully"})
+        m.post(f"{BASE_URL}/files/upload", 
+               json={"message": "File uploaded successfully"},
+               status_code=200)
 
-        with open("test.csv", "w") as f:
-            f.write("id,name\n1,Test")
+        with mock.patch('builtins.input', side_effect=["1", "test.csv"]):
+            mock_file = mock.mock_open(read_data=b"id,name\n1,Test")
+            
+            original_stdout = sys.stdout
+            sys.stdout = io.StringIO()
+            
+            with mock.patch('builtins.open', mock_file):
+                upload()
+            
+            output = sys.stdout.getvalue()
+            sys.stdout = original_stdout
+            
+            assert "user_id" in m.last_request.text
+            assert "1" in m.last_request.text
+            
+            assert "File uploaded successfully" in output
 
-        with open("test.csv", "rb") as file:
-            response = requests.post(
-                "http://127.0.0.1:8000/files/upload", files={"file": file}, data={"user_id": "1"})
 
-        assert response.json()["message"] == "File uploaded successfully"
+def test_upload_error():
+    """
+    Tests the upload function with an error response from the API.
+    
+    This test verifies that the client properly handles and displays error messages
+    from the API when file upload fails.
+    """
+    with requests_mock.Mocker() as m:
+        m.post(f"{BASE_URL}/files/upload", 
+               json={"detail": "File format not supported"}, 
+               status_code=400)
+        
+        with mock.patch('builtins.input', side_effect=["1", "invalid.txt"]):
+            mock_file = mock.mock_open(read_data=b"invalid data")
+            
+            original_stdout = sys.stdout
+            sys.stdout = io.StringIO()
+            
+            with mock.patch('builtins.open', mock_file):
+                upload()
+            
+            output = sys.stdout.getvalue()
+            sys.stdout = original_stdout
+            
+            assert "File format not supported" in output
+
 
 def test_get_users():
     """
-    Tests fetching the list of users.
-
-    This function mocks a GET request to `/users` and verifies that the response
-    returns a list of user objects with the expected structure.
-
-    Test Steps:
-        1. Mock the API response to return a predefined list of users.
-        2. Send a GET request to retrieve the list of users.
-        3. Assert that the response status is 200 (OK).
-        4. Verify that the response contains a list of dictionaries with `id` and `username`.
-
-    Expected API Response:
-        [
-            {"id": 1, "username": "user1"},
-            {"id": 2, "username": "user2"}
-        ]
+    Tests the get_users function from the client module.
+    
+    This test mocks HTTP requests to verify that the get_users function
+    works correctly and displays the list of users.
     """
     with requests_mock.Mocker() as m:
-        m.get("http://127.0.0.1:8000/users", json=[
-            {"id": 1, "username": "user1"},
-            {"id": 2, "username": "user2"},
-        ])
+        users_data = [
+            {"id": "1", "username": "user1"},
+            {"id": "2", "username": "user2"}
+        ]
+        m.get(f"{BASE_URL}/users", json=users_data, status_code=200)
+        
+        original_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+        
+        get_users()
+        
+        output = sys.stdout.getvalue()
+        sys.stdout = original_stdout
+        
+        assert "user1" in output
+        assert "user2" in output
 
-        response = requests.get("http://127.0.0.1:8000/users")
 
-        assert response.status_code == 200
+def test_get_users_error():
+    """
+    Tests the get_users function with an error response from the API.
+    
+    This test verifies that the client properly handles and displays error messages
+    when retrieving the list of users fails.
+    """
+    with requests_mock.Mocker() as m:
+        m.get(f"{BASE_URL}/users", 
+              json={"detail": "Server error"}, 
+              status_code=500)
+        
+        original_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+        
+        get_users()
+        
+        output = sys.stdout.getvalue()
+        sys.stdout = original_stdout
+        
+        assert "Server error" in output
 
-        users = response.json()
-        assert isinstance(users, list)
-        assert all("username" in user and "id" in user for user in users)
 
 def test_get_user_data():
     """
-    Tests fetching CSV data for a specific user.
-
-    This function mocks a GET request to `/users/{user_id}/data` and verifies
-    that the response returns a list of data entries associated with the user.
-
-    Test Steps:
-        1. Define a test user ID.
-        2. Mock the API response to return sample CSV data entries.
-        3. Send a GET request to retrieve the user's data.
-        4. Assert that the response status is 200 (OK).
-        5. Verify that the response contains a list of dictionaries with `id` and `content`.
-
-    Expected API Response:
-        [
-            {"id": 1, "content": "data1"},
-            {"id": 2, "content": "data2"}
-        ]
+    Tests the get_user_data function from the client module.
+    
+    This test mocks user input and HTTP requests to verify that the get_user_data function
+    works correctly and displays the user's data.
     """
-    user_id = 2
-
     with requests_mock.Mocker() as m:
-        m.get(f"http://127.0.0.1:8000/users/{user_id}/data", json=[
-            {"id": 1, "content": "data1"},
-            {"id": 2, "content": "data2"},
-        ])
+        user_data = [
+            {"id": "1", "content": "id,name\n1,Test1"},
+            {"id": "2", "content": "id,name\n2,Test2"}
+        ]
+        m.get(f"{BASE_URL}/users/2/data", json=user_data, status_code=200)
+        
+        with mock.patch('builtins.input', return_value="2"):
+            original_stdout = sys.stdout
+            sys.stdout = io.StringIO()
+            
+            get_user_data()
+            
+            output = sys.stdout.getvalue()
+            sys.stdout = original_stdout
+            
+            assert "Test1" in output
+            assert "Test2" in output
 
-        response = requests.get(f"http://127.0.0.1:8000/users/{user_id}/data")
 
-        assert response.status_code == 200
-
-        data = response.json()
-        assert isinstance(data, list)
-        assert all("id" in entry and "content" in entry for entry in data)
+def test_get_user_data_error():
+    """
+    Tests the get_user_data function with an error response from the API.
+    
+    This test verifies that the client properly handles and displays error messages
+    when retrieving a user's data fails.
+    """
+    with requests_mock.Mocker() as m:
+        m.get(f"{BASE_URL}/users/999/data", 
+              json={"detail": "User not found"}, 
+              status_code=404)
+        
+        with mock.patch('builtins.input', return_value="999"):
+            original_stdout = sys.stdout
+            sys.stdout = io.StringIO()
+            
+            get_user_data()
+            
+            output = sys.stdout.getvalue()
+            sys.stdout = original_stdout
+            
+            assert "User not found" in output
