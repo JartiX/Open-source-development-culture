@@ -346,87 +346,65 @@ db (Session): Database session dependency.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="TestingMocks.tests.test_client.test_get_user_data">
 <span class="sig-prename descclassname"><span class="pre">TestingMocks.tests.test_client.</span></span><span class="sig-name descname"><span class="pre">test_get_user_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TestingMocks.tests.test_client.test_get_user_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tests fetching CSV data for a specific user.</p>
-<p>This function mocks a GET request to <cite>/users/{user_id}/data</cite> and verifies
-that the response returns a list of data entries associated with the user.</p>
-<dl>
-<dt>Test Steps:</dt><dd><ol class="arabic simple">
-<li><p>Define a test user ID.</p></li>
-<li><p>Mock the API response to return sample CSV data entries.</p></li>
-<li><p>Send a GET request to retrieve the user’s data.</p></li>
-<li><p>Assert that the response status is 200 (OK).</p></li>
-<li><p>Verify that the response contains a list of dictionaries with <cite>id</cite> and <cite>content</cite>.</p></li>
-</ol>
-</dd>
-<dt>Expected API Response:</dt><dd><dl class="simple">
-<dt>[</dt><dd><p>{“id”: 1, “content”: “data1”},
-{“id”: 2, “content”: “data2”}</p>
-</dd>
-</dl>
-<p>]</p>
-</dd>
-</dl>
+<dd><p>Tests the get_user_data function from the client module.</p>
+<p>This test mocks user input and HTTP requests to verify that the get_user_data function
+works correctly and displays the user’s data.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TestingMocks.tests.test_client.test_get_user_data_error">
+<span class="sig-prename descclassname"><span class="pre">TestingMocks.tests.test_client.</span></span><span class="sig-name descname"><span class="pre">test_get_user_data_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TestingMocks.tests.test_client.test_get_user_data_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the get_user_data function with an error response from the API.</p>
+<p>This test verifies that the client properly handles and displays error messages
+when retrieving a user’s data fails.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="TestingMocks.tests.test_client.test_get_users">
 <span class="sig-prename descclassname"><span class="pre">TestingMocks.tests.test_client.</span></span><span class="sig-name descname"><span class="pre">test_get_users</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TestingMocks.tests.test_client.test_get_users" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tests fetching the list of users.</p>
-<p>This function mocks a GET request to <cite>/users</cite> and verifies that the response
-returns a list of user objects with the expected structure.</p>
-<dl>
-<dt>Test Steps:</dt><dd><ol class="arabic simple">
-<li><p>Mock the API response to return a predefined list of users.</p></li>
-<li><p>Send a GET request to retrieve the list of users.</p></li>
-<li><p>Assert that the response status is 200 (OK).</p></li>
-<li><p>Verify that the response contains a list of dictionaries with <cite>id</cite> and <cite>username</cite>.</p></li>
-</ol>
-</dd>
-<dt>Expected API Response:</dt><dd><dl class="simple">
-<dt>[</dt><dd><p>{“id”: 1, “username”: “user1”},
-{“id”: 2, “username”: “user2”}</p>
-</dd>
-</dl>
-<p>]</p>
-</dd>
-</dl>
+<dd><p>Tests the get_users function from the client module.</p>
+<p>This test mocks HTTP requests to verify that the get_users function
+works correctly and displays the list of users.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TestingMocks.tests.test_client.test_get_users_error">
+<span class="sig-prename descclassname"><span class="pre">TestingMocks.tests.test_client.</span></span><span class="sig-name descname"><span class="pre">test_get_users_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TestingMocks.tests.test_client.test_get_users_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the get_users function with an error response from the API.</p>
+<p>This test verifies that the client properly handles and displays error messages
+when retrieving the list of users fails.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="TestingMocks.tests.test_client.test_register">
 <span class="sig-prename descclassname"><span class="pre">TestingMocks.tests.test_client.</span></span><span class="sig-name descname"><span class="pre">test_register</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TestingMocks.tests.test_client.test_register" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tests the user registration endpoint.</p>
-<p>This function mocks a POST request to <cite>/users/register</cite> and verifies
-that the response contains the expected success message.</p>
-<dl class="simple">
-<dt>Test Steps:</dt><dd><ol class="arabic simple">
-<li><p>Mock the API response to return a success message.</p></li>
-<li><p>Send a POST request with test user credentials.</p></li>
-<li><p>Assert that the response message matches the expected output.</p></li>
-</ol>
-</dd>
-<dt>Expected API Response:</dt><dd><p>{“message”: “User registered successfully”}</p>
-</dd>
-</dl>
+<dd><p>Tests the user registration function from the client module.</p>
+<p>This test mocks user input and HTTP requests to verify that the register function
+works correctly with the mocked API.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TestingMocks.tests.test_client.test_register_error">
+<span class="sig-prename descclassname"><span class="pre">TestingMocks.tests.test_client.</span></span><span class="sig-name descname"><span class="pre">test_register_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TestingMocks.tests.test_client.test_register_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the register function with an error response from the API.</p>
+<p>This test verifies that the client properly handles and displays error messages
+from the API when registration fails.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="TestingMocks.tests.test_client.test_upload">
 <span class="sig-prename descclassname"><span class="pre">TestingMocks.tests.test_client.</span></span><span class="sig-name descname"><span class="pre">test_upload</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TestingMocks.tests.test_client.test_upload" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tests the file upload endpoint.</p>
-<p>This function creates a temporary CSV file, mocks a POST request to <cite>/files/upload</cite>,
-and verifies that the response confirms a successful upload.</p>
-<dl class="simple">
-<dt>Test Steps:</dt><dd><ol class="arabic simple">
-<li><p>Mock the API response for a file upload.</p></li>
-<li><p>Create a test CSV file with sample data.</p></li>
-<li><p>Open the file and send a POST request to the <cite>/files/upload</cite> endpoint.</p></li>
-<li><p>Assert that the response message matches the expected output.</p></li>
-</ol>
-</dd>
-<dt>Expected API Response:</dt><dd><p>{“message”: “File uploaded successfully”}</p>
-</dd>
-</dl>
+<dd><p>Tests the file upload function from the client module.</p>
+<p>This test mocks user input, file operations, and HTTP requests to verify that
+the upload function works correctly with the mocked API.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="TestingMocks.tests.test_client.test_upload_error">
+<span class="sig-prename descclassname"><span class="pre">TestingMocks.tests.test_client.</span></span><span class="sig-name descname"><span class="pre">test_upload_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TestingMocks.tests.test_client.test_upload_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the upload function with an error response from the API.</p>
+<p>This test verifies that the client properly handles and displays error messages
+from the API when file upload fails.</p>
 </dd></dl>
 
 </section>
