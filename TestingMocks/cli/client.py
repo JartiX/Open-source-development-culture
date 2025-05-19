@@ -19,14 +19,33 @@ def upload():
             f"{BASE_URL}/files/upload", files={"file": file}, data={"user_id": user_id})
     print(response.json())
 
+def get_users():
+    """
+    Retrieves a list of all registered users.
+    """
+    response = requests.get(f"{BASE_URL}/users")
+    print(response.json())
 
+
+def get_user_data():
+    """
+    Retrieves CSV data for a specific user.
+    """
+    user_id = input("Enter user ID: ")
+    response = requests.get(f"{BASE_URL}/users/{user_id}/data")
+    print(response.json())
+    
 if __name__ == "__main__":
     while True:
-        print("\n1. Register\n2. Upload CSV\n3. Exit")
+        print("\n1. Register\n2. Upload CSV\n3. Get Users\n4. Get User Data\n5. Exit")
         choice = input("Select option: ")
         if choice == "1":
             register()
         elif choice == "2":
             upload()
         elif choice == "3":
+            get_users()
+        elif choice == "4":
+            get_user_data()
+        elif choice == "5":
             break
